@@ -1,0 +1,89 @@
+class Contact:
+    def __init__(self, name, phone, email):
+        self.contact_name = name
+        self.contact_phone = phone
+        self.contact_email = email
+
+    def printInfo(self):
+        return print(f"{self.contact_name}, {self.contact_phone}, {self.contact_email}")
+
+
+class ContactManager(Contact):
+    def __init__(self, name=0, phone=0, email=0):
+        super().__init__(self, name, phone)
+        self.chosen_contact = None
+        self.contact_list = []
+
+    def add(self, contact):
+        self.chosen_contact = contact
+        self.contact_list.append(self.chosen_contact)
+
+    def remove(self, contact_name):
+        for x in self.contact_list:
+            if x.contact_name == contact_name:
+                self.contact_list.remove(x)
+                return print("Contact has been removed")
+        else:
+            return print("There is no such contact")
+
+    def display(self):
+        for x in self.contact_list:
+            x.printInfo()
+
+    def search(self, contact_name):
+        for x in self.contact_list:
+            if x.contact_name == contact_name:
+                x.printInfo()
+                break
+        else:
+            return print("There is no such contact")
+
+    def update(self, contact_name, phone, email):
+        for x in self.contact_list:
+            if x.contact_name == contact_name:
+                x.contact_phone = phone
+                x.contact_email = email
+                break
+        else:
+            return print("There is no such contact")
+
+
+cm = ContactManager()
+
+while True:
+    try:
+        print("Choose one operation: a, r, d, s, u, or e:a")
+        answer = input()
+    except ValueError:
+        continue
+    else:
+        if answer == "e":
+            break
+        if answer != "a" and answer != "r" and answer != "d" and answer != "s" and answer != "u":
+            print("Incorrect operation")
+        if answer == "a":
+            try:
+                cname, cphone, cemail = input("""Enter the name, phone, email 
+            (use single space to separate the values): """).split()
+                cname = Contact(cname, cphone, cemail)
+                cm.add(cname)
+            except ValueError:
+                print("More Inputs needed")
+
+        elif answer == "r":
+            rcontact_name = input("Enter the name of a contact you want to remove: ")
+            for ContactName in cm.contact_list:
+                if ContactName.contact_name == rcontact_name:
+                    cm.remove(rcontact_name)
+
+        elif answer == "d":
+            cm.display()
+
+        elif answer == "u":
+            u_cname, u_phone, u_email = input("Enter the name of a contact you want to update and new phone and email (use a single space to seprate the values): ").split()
+            cm.update(u_cname, u_phone, u_email)
+            print("Contact has been successfully updated")
+
+        elif answer == "s":
+            s_cname = input("Enter the name of a contact you want to search: ")
+            cm.search(s_cname)
